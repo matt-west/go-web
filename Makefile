@@ -3,7 +3,8 @@ include ${GO_HOME}/go/src/Make.inc
 TARG=goweb
 GOFMT=gofmt
 
-SRC=main.go
+SRC=main.go\
+	person.go\
 
 GOFILES=${SRC}
 

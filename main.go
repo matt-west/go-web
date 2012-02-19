@@ -4,7 +4,9 @@ import "fmt"
 import "http"
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Awesome! GO Server is UP!")
+	fmt.Fprintln(w, "Awesome! GO Server is UP!")
+	matt := Person{"Matt West", 19}
+	matt.Hello(w)
 }
 
 func main() {
