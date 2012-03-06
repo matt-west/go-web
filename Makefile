@@ -4,7 +4,6 @@ TARG=goweb
 GOFMT=gofmt
 
 SRC=main.go\
-	person.go\
 
 GOFILES=${SRC}
 
