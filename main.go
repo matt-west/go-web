@@ -10,7 +10,6 @@ type Page struct {
 }
 
 const pagePath = len("/")
-const blogPath = len("/blog/")
 
 func pageHandler(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseSetFiles("templates.html")
@@ -41,17 +40,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, "Footer", nil)
 }
 
-func blogHandler(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseSetFiles("templates.html")
-
-	t.Execute(w, "Header", nil)
-	
-	t.Execute(w, "Footer", nil)
-}
-
-
 func main() {
 	http.HandleFunc("/", pageHandler)
-	http.HandleFunc("/blog/", blogHandler)
 	http.ListenAndServe(":9980", nil)
 }
