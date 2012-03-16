@@ -36,9 +36,9 @@ func init() {
 	}
 
 	// Parse and Cache Page Templates
-	for _, tmpl := range []string{"index", "about"} {
-		t := template.Must(template.ParseFile("./pages/" + tmpl + ".html"))
-		pageTemplates[tmpl] = t
+	for _, tmpl := range pages {
+		t := template.Must(template.ParseFile("./pages/" + tmpl.Slug + ".html"))
+		pageTemplates[tmpl.Slug] = t
 	}
 
 	// Parse and Cache Layout Templates
