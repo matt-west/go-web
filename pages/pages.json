@@ -10,5 +10,11 @@
 	"Title": "About",
 	"Keywords": "some keywords for about",
 	"Description": "a description for the about page"
+},
+{
+	"Slug": "license",
+	"Title": "License",
+	"Keywords": "some keywords for about",
+	"Description": "a description for the about page"
 }
 ]

@@ -71,7 +71,6 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Header
 	layoutTemplates.Execute(w, "Header", p)
-	layoutTemplates.Execute(w, "Nav", nil)
 
 	// Page Template
 	err := pageTemplates[slug].Execute(w, nil)
