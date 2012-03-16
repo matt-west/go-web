@@ -27,7 +27,7 @@ func init() {
 	var pagesJSON []Page
 	err := json.Unmarshal(pagesRaw, &pagesJSON)
 	if err != nil {
-		// Do Something
+		panic("Could not parse Pages JSON!")
 	}
 
 	// Put Pages into pages map
@@ -42,10 +42,7 @@ func init() {
 	}
 
 	// Parse and Cache Layout Templates
-	layoutTemplates, err = template.ParseSetFiles("templates.html")
-	if err != nil {
-		// Do Something
-	}
+	layoutTemplates = template.SetMust(template.ParseSetFiles("templates.html"))
 }
 
 // Page Handler Constructs and Serves Pages
