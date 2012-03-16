@@ -19,9 +19,8 @@
 {{define "Nav"}}
 	<nav>
 		<ul>
-			{{range .}}
-			<li><a href="{{.Slug |html}}" title="{{.Title |html}}">{{.Title |html}}</a></li>
-			{{end}}
+			<li><a href="/" title="Home">Home</a></li>
+			<li><a href="/about" title="About">About</a></li>
 		</ul>
 	</nav>
 {{end}}
