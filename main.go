@@ -19,6 +19,7 @@ const pagePath = len("/")
 var pages = make(map[string]*Page)
 var pageTemplates = make(map[string]*template.Template)
 var layoutTemplates *template.Set
+var errorTemplates *template.Set
 
 // Init Function to Load Template Files and JSON Dict to Cache
 func init() {
@@ -43,11 +44,13 @@ func init() {
 
 	// Parse and Cache Layout Templates
 	layoutTemplates = template.SetMust(template.ParseSetFiles("templates.html"))
+
+	// Parse and Cache Error Templates
+	errorTemplates = template.SetMust(template.ParseSetFiles("./errors/404.html", "./errors/505.html"))
 }
 
 // Page Handler Constructs and Serves Pages
 func pageHandler(w http.ResponseWriter, r *http.Request) {
-	// TODO: Remove un-neccessary white space from the file
 
 	// Get the page slug, use 'index' if no slug is present
 	slug := r.URL.Path[pagePath:]
@@ -58,10 +61,8 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 	// Check that the page exists and return 404 if it doesn't
 	_, ok := pages[slug]
 	if !ok {
-		e, _ := template.ParseFile("errors/404.html")
-
 		w.WriteHeader(http.StatusNotFound)
-		e.Execute(w, nil)
+		errorTemplates.Execute(w, "404", nil)
 		return
 	}
 
@@ -75,7 +76,8 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 	// Page Template
 	err := pageTemplates[slug].Execute(w, nil)
 	if err != nil {
-		http.Error(w, err.String(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		errorTemplates.Execute(w, "505", nil)
 		return
 	}
 
@@ -85,9 +87,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 
 // Asset Handler Serves CSS, JS and Images
 func assetHandler(w http.ResponseWriter, r *http.Request) {
-	// TODO: Cache Assets
-	assetFile := r.URL.Path[pagePath:]
-	http.ServeFile(w, r, assetFile)
+	http.ServeFile(w, r, r.URL.Path[pagePath:])
 }
 
 // Starts Server and Routes Requests
