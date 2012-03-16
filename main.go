@@ -18,6 +18,7 @@ const pagePath = len("/")
 
 var pages = make(map[string]*Page)
 var pageTemplates = make(map[string]*template.Template)
+var layoutTemplates *template.Set
 
 // Init Function to Load Template Files and JSON Dict to Cache
 func init() {
@@ -39,18 +40,18 @@ func init() {
 		t := template.Must(template.ParseFile("./pages/" + tmpl + ".html"))
 		pageTemplates[tmpl] = t
 	}
+
+	layoutTemplates, err = template.ParseSetFiles("templates.html")
+
+	// Check that the template file parsed correctly
+	if err != nil {
+		// Do Something
+	}
 }
 
 // Page Handler Constructs and Serves Pages
 func pageHandler(w http.ResponseWriter, r *http.Request) {
 	// TODO: Remove un-neccessary white space from the file
-
-	t, err := template.ParseSetFiles("templates.html")
-	// Check that the template file parsed correctly
-	if err != nil {
-		http.Error(w, err.String(), http.StatusInternalServerError)
-		return
-	}
 
 	// Get the page slug, use 'index' if no slug is present
 	slug := r.URL.Path[pagePath:]
@@ -72,17 +73,17 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 	p := pages[slug]
 
 	// Header
-	t.Execute(w, "Header", p)
+	layoutTemplates.Execute(w, "Header", p)
 
 	// Page Template
-	err = pageTemplates[slug].Execute(w, nil)
+	err := pageTemplates[slug].Execute(w, nil)
 	if err != nil {
 		http.Error(w, err.String(), http.StatusInternalServerError)
 		return
 	}
 
 	// Footer
-	t.Execute(w, "Footer", nil)
+	layoutTemplates.Execute(w, "Footer", nil)
 }
 
 // Asset Handler Serves CSS, JS and Images
