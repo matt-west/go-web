@@ -14,16 +14,16 @@
 	<header>
 		Matt's Website
 	</header>
-{{template "Nav"}}
 {{end}}
 
 {{define "Nav"}}
-<nav>
-	<ul>
-		<li><a href="/">Home</a></li>
-		<li><a href="/about">About</a></li>
-	</ul>
-</nav>
+	<nav>
+		<ul>
+			{{range .}}
+			<li><a href="{{.Slug |html}}" title="{{.Title |html}}">{{.Title |html}}</a></li>
+			{{end}}
+		</ul>
+	</nav>
 {{end}}
 
 {{define "Footer"}}

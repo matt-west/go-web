@@ -17,6 +17,7 @@ type Page struct {
 const pagePath = len("/")
 
 var pages = make(map[string]*Page)
+var pagesJSON []Page // Used to store ordered page list for nav, this is a horrible way of doing it.
 var pageTemplates = make(map[string]*template.Template)
 var layoutTemplates *template.Set
 
@@ -24,7 +25,6 @@ var layoutTemplates *template.Set
 func init() {
 	// Parse Page JSON Dict
 	pagesRaw, _ := ioutil.ReadFile("pages/pages.json")
-	var pagesJSON []Page
 	err := json.Unmarshal(pagesRaw, &pagesJSON)
 	if err != nil {
 		// Do Something
@@ -73,6 +73,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Header
 	layoutTemplates.Execute(w, "Header", p)
+	layoutTemplates.Execute(w, "Nav", pagesJSON)
 
 	// Page Template
 	err := pageTemplates[slug].Execute(w, nil)
