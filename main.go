@@ -98,11 +98,6 @@ func findPage(slug string)(page Page) {
 }
 
 func main() {
-	/*
-	 * TODO: Read the Pages JSON to memory here so that we can reduce overhead with
-	 * reading the file. Will also come in handy with generating navigation.
-	 */
-
 	http.HandleFunc("/", pageHandler)
 	http.HandleFunc("/assets/", assetHandler)
 	http.ListenAndServe(":9980", nil)
