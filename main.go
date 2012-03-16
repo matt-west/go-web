@@ -35,15 +35,14 @@ func init() {
 		pages[pagesJSON[i].Slug] = &pagesJSON[i]
 	}
 
-	// Parse Page Templates
+	// Parse and Cache Page Templates
 	for _, tmpl := range []string{"index", "about"} {
 		t := template.Must(template.ParseFile("./pages/" + tmpl + ".html"))
 		pageTemplates[tmpl] = t
 	}
 
+	// Parse and Cache Layout Templates
 	layoutTemplates, err = template.ParseSetFiles("templates.html")
-
-	// Check that the template file parsed correctly
 	if err != nil {
 		// Do Something
 	}
