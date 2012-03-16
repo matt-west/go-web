@@ -8,16 +8,18 @@ import (
 )
 
 type Page struct {
-	Slug				string
-	Title 			string
-	Keywords		string
-	Description	string
+	Slug        string
+	Title       string
+	Keywords    string
+	Description string
 }
 
 const pagePath = len("/")
+
 var pages = make(map[string]*Page)
 var pageTemplates = make(map[string]*template.Template)
 
+// Init Function to Load Template Files and JSON Dict to Cache
 func init() {
 	// Parse Page JSON Dict
 	pagesRaw, _ := ioutil.ReadFile("pages/pages.json")
@@ -28,7 +30,7 @@ func init() {
 	}
 
 	// Put Pages into pages map
-	for i:=0;i<len(pagesJSON);i++ {
+	for i := 0; i < len(pagesJSON); i++ {
 		pages[pagesJSON[i].Slug] = &pagesJSON[i]
 	}
 
@@ -39,6 +41,7 @@ func init() {
 	}
 }
 
+// Page Handler Constructs and Serves Pages
 func pageHandler(w http.ResponseWriter, r *http.Request) {
 	// TODO: Remove un-neccessary white space from the file
 
@@ -66,7 +69,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Find the page
-  p := findPage(slug)
+	p := pages[slug]
 
 	// Header
 	t.Execute(w, "Header", p)
@@ -82,21 +85,14 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, "Footer", nil)
 }
 
+// Asset Handler Serves CSS, JS and Images
 func assetHandler(w http.ResponseWriter, r *http.Request) {
 	// TODO: Cache Assets
 	assetFile := r.URL.Path[pagePath:]
 	http.ServeFile(w, r, assetFile)
 }
 
-func findPage(slug string)(page Page) {
-	page.Slug = pages[slug].Slug
-	page.Title = pages[slug].Title
-	page.Keywords = pages[slug].Keywords
-	page.Description = pages[slug].Description
-
-	return page
-}
-
+// Starts Server and Routes Requests
 func main() {
 	http.HandleFunc("/", pageHandler)
 	http.HandleFunc("/assets/", assetHandler)
