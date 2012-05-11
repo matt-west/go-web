@@ -4,7 +4,8 @@ A simple template based website framework.
 
 ## Instructions
 
-Pages go in the `/pages/` folder.
+Add page html files to the `/pages/` folder.
+Create an entry for the page in `/data/pages.json`. This allows you to set the slug, title, keywords and description.
 
 ## Notes
 
